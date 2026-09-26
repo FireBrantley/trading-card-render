@@ -63,6 +63,12 @@ export function TradingCard({
       className={`relative w-[360px] sm:w-[380px] h-[580px] sm:h-[600px] rounded-3xl p-3 sm:p-3.5 transition-all duration-200 select-none flex flex-col shrink-0 overflow-hidden isolate box-border ${className}`}
       style={{
         fontFamily: "'Outfit', sans-serif",
+        width: '380px',
+        maxWidth: '100%',
+        height: '590px',
+        minHeight: '590px',
+        maxHeight: '590px',
+        boxSizing: 'border-box',
         background: `linear-gradient(to bottom, ${colorStart}, ${colorEnd})`,
         boxShadow: '0 12px 32px -8px rgba(0, 0, 0, 0.35)',
         border: 'none',
@@ -75,7 +81,12 @@ export function TradingCard({
         className={`relative w-full h-full rounded-[20px] overflow-hidden border flex flex-col justify-between pb-2.5 shrink-0 transition-colors duration-200 ${
           useWhiteText ? 'text-white border-white/10' : 'text-stone-900 border-black/10'
         }`}
-        style={{ backgroundColor: cardColor }}
+        style={{
+          backgroundColor: cardColor,
+          borderRadius: '20px',
+          width: '100%',
+          height: '100%',
+        }}
       >
         {/* Card Header: Type, Name, and Health */}
         <header
