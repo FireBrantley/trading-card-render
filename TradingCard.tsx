@@ -60,10 +60,9 @@ export function TradingCard({
   return (
     <article
       id={id}
-      className={`relative w-[360px] sm:w-[380px] aspect-[63/88] min-h-[520px] max-h-[640px] rounded-3xl p-3 sm:p-3.5 transition-all duration-200 select-none flex flex-col shrink-0 overflow-hidden isolate box-border ${className}`}
+      className={`relative w-[360px] sm:w-[380px] h-[580px] sm:h-[600px] rounded-3xl p-3 sm:p-3.5 transition-all duration-200 select-none flex flex-col shrink-0 overflow-hidden isolate box-border ${className}`}
       style={{
         fontFamily: "'Outfit', sans-serif",
-        aspectRatio: '63 / 88',
         background: `linear-gradient(to bottom, ${colorStart}, ${colorEnd})`,
         boxShadow: '0 12px 32px -8px rgba(0, 0, 0, 0.35)',
         border: 'none',
@@ -84,6 +83,7 @@ export function TradingCard({
           className={`relative z-10 px-3.5 pt-2.5 pb-2 border-b shrink-0 ${
             useWhiteText ? 'border-white/10' : 'border-black/10'
           }`}
+          style={{ flex: '0 0 auto' }}
         >
           {/* Stage badge row */}
           <div className="flex items-center justify-between gap-2 text-[10px] font-bold tracking-wider uppercase mb-1 overflow-hidden">
@@ -122,6 +122,7 @@ export function TradingCard({
             <div
               id="character-health"
               className="flex items-center gap-1.5 rounded-full px-2.5 py-0.5 shrink-0 transition-colors duration-200 bg-gradient-to-r from-red-600 to-rose-600 border border-red-400 text-white shadow-xs"
+              style={{ flex: '0 0 auto' }}
             >
               <Heart className="w-3.5 h-3.5 shrink-0 text-red-100 fill-red-100" />
               <span className="text-xs font-bold tracking-tight text-red-100">
@@ -138,13 +139,23 @@ export function TradingCard({
         </header>
 
         {/* Character Illustration Frame - Strictly blocked dimensions & aspect ratio */}
-        <section id="card-portrait-area" className="relative z-10 px-3 pt-2 pb-1 shrink-0 w-full">
+        <section
+          id="card-portrait-area"
+          className="relative z-10 px-3 pt-2 pb-1 shrink-0 w-full"
+          style={{ flex: '0 0 auto' }}
+        >
           <div
             id="portrait-frame"
-            className={`relative w-full h-[160px] min-h-[160px] max-h-[160px] aspect-[2/1] rounded-xl overflow-hidden border-2 flex items-center justify-center shrink-0 ${
+            className={`relative w-full rounded-xl overflow-hidden border-2 flex items-center justify-center shrink-0 ${
               useWhiteText ? 'bg-white/[0.03]' : 'bg-black/[0.02]'
             }`}
-            style={{ borderColor: colorStart }}
+            style={{
+              borderColor: colorStart,
+              height: '160px',
+              minHeight: '160px',
+              maxHeight: '160px',
+              flex: '0 0 160px',
+            }}
           >
             {/* Edge-to-Edge Blueprint Grid & Corner Brackets */}
             {(showGrid || showCornerBrackets) && (
