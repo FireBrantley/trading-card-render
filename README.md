@@ -11,21 +11,16 @@ A responsive, customizable React trading card component built with Tailwind CSS 
 - Tailwind CSS 3+
 - Lucide React
 
-### Install via GitHub Packages
-
-First, configure npm to install from GitHub Packages by creating or updating `.npmrc` in your project root:
-
-```
-@FireBrantley:registry=https://npm.pkg.github.com
-//npm.pkg.github.com/:_authToken=YOUR_GITHUB_PAT
-```
-
-Replace `YOUR_GITHUB_PAT` with a [GitHub Personal Access Token](https://github.com/settings/tokens) that has `read:packages` scope.
-
-Then install the package:
+### Install via GitHub
 
 ```bash
-npm install @FireBrantley/trading-card-render
+npm install github:FireBrantley/trading-card-render
+```
+
+Then import:
+
+```tsx
+import { TradingCard } from '@FireBrantley/trading-card-render';
 ```
 
 ---
@@ -150,11 +145,21 @@ export interface TradingCardProps {
 
 ## 🎨 Key Features
 
-### Automatic Contrast Calculation
-The component calculates WCAG 2.1 relative luminance on your `cardColor` and automatically switches between white text on dark/saturated backgrounds and dark text on light backgrounds—no manual tweaking needed.
+### Enforced Standard Trading Card Aspect Ratio
+The component strictly enforces the standard physical trading card aspect ratio (63mm × 88mm / 2.5in × 3.5in), preventing the card from collapsing into a square or stretching into an irregular shape.
 
-### Full-Bleed Blueprint Grid
-A vector-scaled SVG grid spans the entire portrait canvas with corner brackets that snap to grid intersections. Both grid and brackets can be toggled independently via `showGrid` and `showCornerBrackets`.
+### Locked Portrait Frame Geometry
+The illustration portrait frame is strictly dimensioned and aspect-locked, preventing flex parents or external styles from squashing or flattening the illustration.
+
+### Photometric Relative Luminance Contrast
+Calculates WCAG 2.1 relative luminance on your `cardColor` and automatically switches between:
+- White text (`text-white/90`) on dark or rich saturated colors (obsidian, royal blue, deep red, purple)
+- Dark text (`text-stone-900`) on light backgrounds (cream, white, yellow)
+
+**No manual text color adjustment needed.**
+
+### Edge-to-Edge Blueprint Grid
+A fully vector-scaled SVG grid spans the entire portrait canvas (`viewBox="0 0 320 160"`). Corner brackets snap mathematically to grid coordinate intersections at `(16, 16)`, `(304, 16)`, `(16, 144)`, and `(304, 144)`. Both grid and brackets can be toggled independently via `showGrid` and `showCornerBrackets`.
 
 ### Customizable Color Gradients
 Fine-tune the card's look with `colorStart`, `colorEnd`, and `cardColor` hex values. The gradient applies to borders, accents, and damage numbers for a cohesive aesthetic.

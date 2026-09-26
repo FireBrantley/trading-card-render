@@ -60,9 +60,10 @@ export function TradingCard({
   return (
     <article
       id={id}
-      className={`relative w-[360px] sm:w-[380px] h-[580px] sm:h-[600px] rounded-3xl p-3 sm:p-3.5 transition-all duration-200 select-none flex flex-col shrink-0 overflow-hidden isolate box-border ${className}`}
+      className={`relative w-[360px] sm:w-[380px] aspect-[63/88] min-h-[520px] max-h-[640px] rounded-3xl p-3 sm:p-3.5 transition-all duration-200 select-none flex flex-col shrink-0 overflow-hidden isolate box-border ${className}`}
       style={{
         fontFamily: "'Outfit', sans-serif",
+        aspectRatio: '63 / 88',
         background: `linear-gradient(to bottom, ${colorStart}, ${colorEnd})`,
         boxShadow: '0 12px 32px -8px rgba(0, 0, 0, 0.35)',
         border: 'none',
@@ -136,11 +137,11 @@ export function TradingCard({
           </div>
         </header>
 
-        {/* Character Illustration Frame - Strictly locked to prevent squashing */}
-        <section id="card-portrait-area" className="relative z-10 px-3 pt-2 pb-1 shrink-0">
+        {/* Character Illustration Frame - Strictly blocked dimensions & aspect ratio */}
+        <section id="card-portrait-area" className="relative z-10 px-3 pt-2 pb-1 shrink-0 w-full">
           <div
             id="portrait-frame"
-            className={`relative w-full h-[160px] sm:h-[170px] min-h-[160px] rounded-xl overflow-hidden border-2 flex items-center justify-center shrink-0 ${
+            className={`relative w-full h-[160px] min-h-[160px] max-h-[160px] aspect-[2/1] rounded-xl overflow-hidden border-2 flex items-center justify-center shrink-0 ${
               useWhiteText ? 'bg-white/[0.03]' : 'bg-black/[0.02]'
             }`}
             style={{ borderColor: colorStart }}
@@ -189,7 +190,7 @@ export function TradingCard({
               id="character-emoji"
               role="img"
               aria-label={`${name} character`}
-              className="relative z-10 text-6xl sm:text-7xl select-none"
+              className="relative z-10 text-6xl sm:text-7xl select-none shrink-0"
             >
               {emoji || '❓'}
             </div>
@@ -209,8 +210,8 @@ export function TradingCard({
           )}
         </section>
 
-        {/* Abilities & Attacks Section - Protected Flex Distribution */}
-        <section id="card-abilities" className="relative z-10 flex-1 min-h-0 flex flex-col justify-between px-3.5 py-1">
+        {/* Abilities & Attacks Section - Structured spacing to prevent erratic vertical drift */}
+        <section id="card-abilities" className="relative z-10 flex-1 min-h-0 flex flex-col justify-start gap-2.5 px-3.5 py-1">
           {/* Passive Trait / Ability (if present) */}
           {ability && (
             <div
@@ -243,15 +244,15 @@ export function TradingCard({
             </div>
           )}
 
-          {/* Attacks list (Max 2 attacks) - Vertically balanced & shifted down from ability */}
-          <div className={`flex-1 flex flex-col justify-center min-h-0 ${ability ? 'pt-2.5 pb-1 gap-3' : 'py-2 gap-3.5'}`}>
+          {/* Attacks list (Max 2 attacks) - Anchored with predictable rhythm */}
+          <div className="flex-1 flex flex-col justify-start gap-2.5 min-h-0 pt-0.5">
             {visibleAttacks.map((attack, index) => (
               <div
                 key={index}
                 id={`attack-${index}`}
                 className={`flex flex-col gap-0.5 shrink-0 ${
                   index < visibleAttacks.length - 1
-                    ? `border-b pb-2.5 ${useWhiteText ? 'border-white/10' : 'border-black/10'}`
+                    ? `border-b pb-2 ${useWhiteText ? 'border-white/10' : 'border-black/10'}`
                     : ''
                 }`}
               >
@@ -286,7 +287,7 @@ export function TradingCard({
                   )}
                 </div>
 
-                {/* Attack Description - Body text slightly adjusted for readability */}
+                {/* Attack Description */}
                 {attack.description && (
                   <p
                     className={`text-[11px] leading-snug break-words ${
@@ -305,7 +306,7 @@ export function TradingCard({
         {combatMatrix && (
           <section
             id="card-combat-matrix"
-            className={`relative z-10 mx-3 mt-2 px-2.5 py-1.5 rounded-lg border text-[10px] grid grid-cols-3 divide-x text-center shrink-0 ${
+            className={`relative z-10 mx-3 mt-auto mb-1 px-2.5 py-1.5 rounded-lg border text-[10px] grid grid-cols-3 divide-x text-center shrink-0 ${
               useWhiteText
                 ? 'bg-white/[0.04] border-white/10 divide-white/10'
                 : 'bg-black/[0.03] border-black/10 divide-black/10'
