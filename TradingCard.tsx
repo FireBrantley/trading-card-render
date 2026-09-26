@@ -60,7 +60,7 @@ export function TradingCard({
   return (
     <article
       id={id}
-      className={`relative w-[360px] sm:w-[380px] h-[580px] sm:h-[600px] rounded-3xl p-3 sm:p-3.5 transition-all duration-200 select-none flex flex-col shrink-0 ${className}`}
+      className={`relative w-[360px] sm:w-[380px] h-[580px] sm:h-[600px] rounded-3xl p-3 sm:p-3.5 transition-all duration-200 select-none flex flex-col shrink-0 overflow-hidden isolate box-border ${className}`}
       style={{
         fontFamily: "'Outfit', sans-serif",
         background: `linear-gradient(to bottom, ${colorStart}, ${colorEnd})`,
@@ -72,7 +72,7 @@ export function TradingCard({
       {/* Inner Card Card-Stock Canvas with configurable cardColor */}
       <div
         id="card-inner-surface"
-        className={`relative h-full rounded-[20px] overflow-hidden border flex flex-col justify-between pb-2.5 transition-colors duration-200 ${
+        className={`relative w-full h-full rounded-[20px] overflow-hidden border flex flex-col justify-between pb-2.5 shrink-0 transition-colors duration-200 ${
           useWhiteText ? 'text-white border-white/10' : 'text-stone-900 border-black/10'
         }`}
         style={{ backgroundColor: cardColor }}
@@ -80,22 +80,22 @@ export function TradingCard({
         {/* Card Header: Type, Name, and Health */}
         <header
           id="card-header"
-          className={`relative z-10 px-3.5 pt-2.5 pb-2 border-b ${
+          className={`relative z-10 px-3.5 pt-2.5 pb-2 border-b shrink-0 ${
             useWhiteText ? 'border-white/10' : 'border-black/10'
           }`}
         >
           {/* Stage badge row */}
-          <div className="flex items-center justify-between text-[10px] font-bold tracking-wider uppercase mb-1">
+          <div className="flex items-center justify-between gap-2 text-[10px] font-bold tracking-wider uppercase mb-1 overflow-hidden">
             <span
-              className="flex items-center gap-1 font-bold"
+              className="flex items-center gap-1 font-bold shrink-0"
               style={{ color: colorStart }}
             >
-              <Sparkles className="w-3 h-3" style={{ color: colorStart }} />
-              {stageBadge || 'Basic'}
+              <Sparkles className="w-3 h-3 shrink-0" style={{ color: colorStart }} />
+              <span className="truncate">{stageBadge || 'Basic'}</span>
             </span>
             {evolutionNote && (
               <span
-                className={`text-[10px] tracking-normal font-medium ${
+                className={`text-[10px] tracking-normal font-medium truncate text-right ${
                   useWhiteText ? 'text-white/70' : 'text-stone-500'
                 }`}
               >
@@ -106,7 +106,7 @@ export function TradingCard({
 
           {/* Main Title Row: Character Name & HP Badge */}
           <div className="flex items-center justify-between gap-2">
-            <div className="flex items-center gap-1.5 min-w-0">
+            <div className="flex items-center gap-1.5 min-w-0 flex-1">
               <h1
                 id="character-name"
                 className={`text-2xl font-black tracking-wide truncate ${
@@ -117,33 +117,18 @@ export function TradingCard({
               </h1>
             </div>
 
-            {/* Health Points (HP) badge */}
+            {/* Health Points (HP) badge - Protected Signature Ruby Red Pill */}
             <div
               id="character-health"
-              className={`flex items-center gap-1.5 rounded-full px-2.5 py-0.5 shrink-0 transition-colors duration-200 ${
-                luminance < 0.05
-                  ? 'bg-gradient-to-r from-red-950 to-red-900 border border-red-500/60 text-red-200'
-                  : 'bg-gradient-to-r from-red-600 to-rose-600 border border-red-400 text-white shadow-xs'
-              }`}
+              className="flex items-center gap-1.5 rounded-full px-2.5 py-0.5 shrink-0 transition-colors duration-200 bg-gradient-to-r from-red-600 to-rose-600 border border-red-400 text-white shadow-xs"
             >
-              <Heart
-                className={`w-3.5 h-3.5 shrink-0 ${
-                  luminance < 0.05 ? 'text-red-400 fill-red-400' : 'text-red-100 fill-red-100'
-                }`}
-              />
-              <span className={`text-xs font-bold tracking-tight ${luminance < 0.05 ? 'text-red-200' : 'text-red-100'}`}>
-                HP{' '}
-                <strong className="text-sm font-extrabold text-white">
-                  {hp ?? 0}
-                </strong>
+              <Heart className="w-3.5 h-3.5 shrink-0 text-red-100 fill-red-100" />
+              <span className="text-xs font-bold tracking-tight text-red-100">
+                HP <strong className="text-sm font-extrabold text-white">{hp ?? 0}</strong>
               </span>
               <span
                 title="Element"
-                className={`w-4 h-4 rounded-full flex items-center justify-center text-[10px] shrink-0 border ${
-                  luminance < 0.05
-                    ? 'bg-white/10 border-white/20 text-white'
-                    : 'bg-black/20 border-white/40 text-white'
-                }`}
+                className="w-4 h-4 rounded-full flex items-center justify-center text-[10px] shrink-0 border bg-black/20 border-white/40 text-white"
               >
                 {elementEmoji || '✨'}
               </span>
@@ -151,11 +136,11 @@ export function TradingCard({
           </div>
         </header>
 
-        {/* Character Illustration Frame */}
-        <section id="card-portrait-area" className="relative z-10 px-3 pt-2 pb-1">
+        {/* Character Illustration Frame - Strictly locked to prevent squashing */}
+        <section id="card-portrait-area" className="relative z-10 px-3 pt-2 pb-1 shrink-0">
           <div
             id="portrait-frame"
-            className={`relative h-[160px] sm:h-[170px] rounded-xl overflow-hidden border-2 flex items-center justify-center ${
+            className={`relative w-full h-[160px] sm:h-[170px] min-h-[160px] rounded-xl overflow-hidden border-2 flex items-center justify-center shrink-0 ${
               useWhiteText ? 'bg-white/[0.03]' : 'bg-black/[0.02]'
             }`}
             style={{ borderColor: colorStart }}
@@ -195,7 +180,7 @@ export function TradingCard({
 
             {/* Ambient inner halo with gradient */}
             <div
-              className="absolute w-36 h-36 rounded-full blur-xl"
+              className="absolute w-36 h-36 rounded-full blur-xl pointer-events-none"
               style={{ background: `radial-gradient(circle, ${colorStart}40, transparent 70%)` }}
             />
 
@@ -214,7 +199,7 @@ export function TradingCard({
           {cardNumber && (
             <div
               id="character-specs"
-              className={`mt-1.5 text-center text-[10px] font-semibold tracking-widest uppercase py-0.5 px-2 rounded-md border ${
+              className={`mt-1.5 text-center text-[10px] font-semibold tracking-widest uppercase py-0.5 px-2 rounded-md border shrink-0 ${
                 useWhiteText ? 'bg-white/[0.04] border-white/10' : 'bg-black/[0.03] border-black/10'
               }`}
               style={{ color: colorStart }}
@@ -224,8 +209,8 @@ export function TradingCard({
           )}
         </section>
 
-        {/* Abilities & Attacks Section */}
-        <section id="card-abilities" className="relative z-10 flex-1 flex flex-col justify-between px-3.5 py-1 min-h-0">
+        {/* Abilities & Attacks Section - Protected Flex Distribution */}
+        <section id="card-abilities" className="relative z-10 flex-1 min-h-0 flex flex-col justify-between px-3.5 py-1">
           {/* Passive Trait / Ability (if present) */}
           {ability && (
             <div
@@ -236,13 +221,13 @@ export function TradingCard({
             >
               <div className="flex items-center gap-1.5 mb-0.5">
                 <span
-                  className="text-[9px] font-extrabold uppercase tracking-wider px-1.5 py-0.2 rounded"
+                  className="text-[9px] font-extrabold uppercase tracking-wider px-1.5 py-0.2 rounded shrink-0"
                   style={{ backgroundColor: colorEnd, color: '#ffffff' }}
                 >
                   Ability
                 </span>
                 <span
-                  className="text-xs font-bold"
+                  className="text-xs font-bold truncate"
                   style={{ color: colorEnd }}
                 >
                   {ability.name}
