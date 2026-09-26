@@ -32,6 +32,58 @@ function getContrast(hex1: string, hex2: string): number {
   return (Math.max(l1, l2) + 0.05) / (Math.min(l1, l2) + 0.05);
 }
 
+function lightenHex(hex: string, amount: number = 0.55): string {
+  let clean = hex.replace('#', '').trim();
+  if (clean.length === 3) clean = clean.split('').map((c) => c + c).join('');
+  if (clean.length !== 6) return '#f1f5f9';
+  const r = parseInt(clean.substring(0, 2), 16);
+  const g = parseInt(clean.substring(2, 4), 16);
+  const b = parseInt(clean.substring(4, 6), 16);
+  if (isNaN(r) || isNaN(g) || isNaN(b)) return '#f1f5f9';
+  const newR = Math.min(255, Math.round(r + (255 - r) * amount));
+  const newG = Math.min(255, Math.round(g + (255 - g) * amount));
+  const newB = Math.min(255, Math.round(b + (255 - b) * amount));
+  return `#${newR.toString(16).padStart(2, '0')}${newG.toString(16).padStart(2, '0')}${newB.toString(16).padStart(2, '0')}`;
+}
+
+function darkenHex(hex: string, amount: number = 0.55): string {
+  let clean = hex.replace('#', '').trim();
+  if (clean.length === 3) clean = clean.split('').map((c) => c + c).join('');
+  if (clean.length !== 6) return '#0f172a';
+  const r = parseInt(clean.substring(0, 2), 16);
+  const g = parseInt(clean.substring(2, 4), 16);
+  const b = parseInt(clean.substring(4, 6), 16);
+  if (isNaN(r) || isNaN(g) || isNaN(b)) return '#0f172a';
+  const newR = Math.max(0, Math.round(r * (1 - amount)));
+  const newG = Math.max(0, Math.round(g * (1 - amount)));
+  const newB = Math.max(0, Math.round(b * (1 - amount)));
+  return `#${newR.toString(16).padStart(2, '0')}${newG.toString(16).padStart(2, '0')}${newB.toString(16).padStart(2, '0')}`;
+}
+
+/**
+ * Ensures text colored with an accent hex is clearly readable against the background.
+ * If contrast is below the human readability threshold (< 3.2:1), shifts or falls back to a legible tone.
+ */
+function getReadableAccent(accentHex: string, bgHex: string, isDarkBg: boolean): string {
+  const contrast = getContrast(accentHex, bgHex);
+  if (contrast >= 3.2) {
+    return accentHex;
+  }
+  if (isDarkBg) {
+    const lightened = lightenHex(accentHex, 0.6);
+    if (getContrast(lightened, bgHex) >= 3.5) {
+      return lightened;
+    }
+    return '#f1f5f9';
+  } else {
+    const darkened = darkenHex(accentHex, 0.6);
+    if (getContrast(darkened, bgHex) >= 3.5) {
+      return darkened;
+    }
+    return '#0f172a';
+  }
+}
+
 export function TradingCard({
   id = 'trading-card',
   name = '',
@@ -56,6 +108,10 @@ export function TradingCard({
   // Photometric luminance determines whether body text is white or dark
   const luminance = getRelativeLuminance(cardColor);
   const useWhiteText = luminance < 0.36;
+
+  // Ensure colored text (stage badge, card number, ability name, damage) is clearly legible against card background
+  const legibleColorStart = getReadableAccent(colorStart, cardColor, useWhiteText);
+  const legibleColorEnd = getReadableAccent(colorEnd, cardColor, useWhiteText);
 
   return (
     <article
@@ -100,9 +156,9 @@ export function TradingCard({
           <div className="flex items-center justify-between gap-2 text-[10px] font-bold tracking-wider uppercase mb-1 overflow-hidden">
             <span
               className="flex items-center gap-1 font-bold shrink-0"
-              style={{ color: colorStart }}
+              style={{ color: legibleColorStart }}
             >
-              <Sparkles className="w-3 h-3 shrink-0" style={{ color: colorStart }} />
+              <Sparkles className="w-3 h-3 shrink-0" style={{ color: legibleColorStart }} />
               <span className="truncate">{stageBadge || 'Basic'}</span>
             </span>
             {evolutionNote && (
@@ -225,7 +281,7 @@ export function TradingCard({
               className={`mt-1.5 text-center text-[10px] font-semibold tracking-widest uppercase py-0.5 px-2 rounded-md border shrink-0 ${
                 useWhiteText ? 'bg-white/[0.04] border-white/10' : 'bg-black/[0.03] border-black/10'
               }`}
-              style={{ color: colorStart }}
+              style={{ color: legibleColorStart }}
             >
               {cardNumber}
             </div>
@@ -251,7 +307,7 @@ export function TradingCard({
                 </span>
                 <span
                   className="text-xs font-bold truncate"
-                  style={{ color: colorEnd }}
+                  style={{ color: legibleColorEnd }}
                 >
                   {ability.name}
                 </span>
@@ -302,7 +358,7 @@ export function TradingCard({
                   {(attack.damage !== '' && attack.damage !== undefined) && (
                     <span
                       className="text-base font-black text-right shrink-0 pl-1"
-                      style={{ color: colorEnd }}
+                      style={{ color: legibleColorEnd }}
                     >
                       {attack.damage}
                     </span>
