@@ -11,16 +11,50 @@ A responsive, customizable React trading card component built with Tailwind CSS 
 - Tailwind CSS 3+
 - Lucide React
 
-### Install via GitHub
+### Install from GitHub
+
+**Via npm command:**
 
 ```bash
 npm install github:FireBrantley/trading-card-render
 ```
 
-Then import:
+**Or add directly to `package.json`:**
+
+```json
+{
+  "dependencies": {
+    "@FireBrantley/trading-card-render": "github:FireBrantley/trading-card-render"
+  }
+}
+```
+
+Then run `npm install`.
+
+**Import in your code:**
 
 ```tsx
 import { TradingCard } from '@FireBrantley/trading-card-render';
+```
+
+### 💡 Tailwind CSS Integration Note
+
+The card has all critical layout dimensions (width, height, aspect ratio, portrait frame) hardcoded into native inline CSS styles, so it **works 100% out of the box** even if `node_modules` is not scanned.
+
+If you are using **Tailwind CSS v4** and want all utility classes to be compiled seamlessly by your build tool, add this line to your main CSS file:
+
+```css
+@import "tailwindcss";
+@source "../node_modules/@FireBrantley/trading-card-render";
+```
+
+For **Tailwind CSS v3**, add the package path to your `tailwind.config.js`:
+
+```js
+content: [
+  "./src/**/*.{js,ts,jsx,tsx}",
+  "./node_modules/@FireBrantley/trading-card-render/**/*.{js,ts,jsx,tsx}"
+]
 ```
 
 ---
@@ -146,17 +180,17 @@ export interface TradingCardProps {
 ## 🎨 Key Features
 
 ### Enforced Standard Trading Card Aspect Ratio
-The component strictly enforces the standard physical trading card aspect ratio (63mm × 88mm / 2.5in × 3.5in), preventing the card from collapsing into a square or stretching into an irregular shape.
+Strictly enforces the standard physical trading card aspect ratio (63mm × 88mm / 2.5in × 3.5in / `aspect-[63/88]`), preventing the card from collapsing into a square or stretching into an irregular shape.
 
 ### Locked Portrait Frame Geometry
-The illustration portrait frame is strictly dimensioned and aspect-locked, preventing flex parents or external styles from squashing or flattening the illustration.
+The illustration portrait frame is strictly dimensioned and aspect-locked (`h-[160px] min-h-[160px] max-h-[160px] aspect-[2/1] shrink-0`), preventing flex parents or external styles from squashing or flattening the illustration.
 
-### Photometric Relative Luminance Contrast
+### Photometric Relative Luminance & Accent Readability
 Calculates WCAG 2.1 relative luminance on your `cardColor` and automatically switches between:
 - White text (`text-white/90`) on dark or rich saturated colors (obsidian, royal blue, deep red, purple)
 - Dark text (`text-stone-900`) on light backgrounds (cream, white, yellow)
 
-**No manual text color adjustment needed.**
+**Accent Text Contrast Fallback:** When custom accent colors (such as `colorEnd` for damage numbers and ability names or `colorStart` for stage badges and card numbers) have low contrast against dark cards (below 3.2:1), they are automatically shifted to an accessible, illuminated tint (or crisp `#f1f5f9`) so numbers and text are immediately readable.
 
 ### Edge-to-Edge Blueprint Grid
 A fully vector-scaled SVG grid spans the entire portrait canvas (`viewBox="0 0 320 160"`). Corner brackets snap mathematically to grid coordinate intersections at `(16, 16)`, `(304, 16)`, `(16, 144)`, and `(304, 144)`. Both grid and brackets can be toggled independently via `showGrid` and `showCornerBrackets`.
