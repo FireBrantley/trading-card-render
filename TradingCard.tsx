@@ -137,8 +137,8 @@ export function TradingCard({
       {/* Inner Card Card-Stock Canvas with configurable cardColor */}
       <div
         id="card-inner-surface"
-        className={`relative w-full h-full rounded-[20px] overflow-hidden border flex flex-col justify-between pb-2.5 shrink-0 transition-colors duration-200 ${
-          useWhiteText ? 'text-white border-white/10' : 'text-stone-900 border-black/10'
+        className={`relative w-full h-full rounded-[20px] overflow-hidden flex flex-col justify-between pb-2.5 shrink-0 transition-colors duration-200 ${
+          useWhiteText ? 'text-white' : 'text-stone-900'
         }`}
         style={{
           backgroundColor: cardColor,
@@ -150,10 +150,11 @@ export function TradingCard({
         {/* Card Header: Type, Name, and Health */}
         <header
           id="card-header"
-          className={`relative z-10 px-3.5 pt-2.5 pb-2 border-b shrink-0 ${
-            useWhiteText ? 'border-white/10' : 'border-black/10'
-          }`}
-          style={{ flex: '0 0 auto' }}
+          className="relative z-10 px-3.5 pt-2.5 pb-2 shrink-0"
+          style={{
+            flex: '0 0 auto',
+            borderBottom: useWhiteText ? '1px solid rgba(255, 255, 255, 0.08)' : '1px solid rgba(0, 0, 0, 0.06)',
+          }}
         >
           {/* Stage badge row */}
           <div className="flex items-center justify-between gap-2 text-[10px] font-bold tracking-wider uppercase mb-1 overflow-hidden">
@@ -191,8 +192,11 @@ export function TradingCard({
             {/* Health Points (HP) badge - Protected Signature Ruby Red Pill */}
             <div
               id="character-health"
-              className="flex items-center gap-1.5 rounded-full px-2.5 py-0.5 shrink-0 transition-colors duration-200 bg-gradient-to-r from-red-600 to-rose-600 border border-red-400 text-white shadow-xs"
-              style={{ flex: '0 0 auto' }}
+              className="flex items-center gap-1.5 rounded-full px-2.5 py-0.5 shrink-0 transition-colors duration-200 bg-gradient-to-r from-red-600 to-rose-600 text-white shadow-xs"
+              style={{
+                flex: '0 0 auto',
+                border: '1px solid rgba(248, 113, 113, 0.8)',
+              }}
             >
               <Heart className="w-3.5 h-3.5 shrink-0 text-red-100 fill-red-100" />
               <span className="text-xs font-bold tracking-tight text-red-100">
@@ -200,7 +204,8 @@ export function TradingCard({
               </span>
               <span
                 title="Element"
-                className="w-5 h-5 rounded-full flex items-center justify-center text-xs shrink-0 border bg-black/25 border-white/40 text-white leading-none shadow-xs"
+                className="w-5 h-5 rounded-full flex items-center justify-center text-xs shrink-0 bg-black/25 text-white leading-none shadow-xs"
+                style={{ border: '1px solid rgba(255, 255, 255, 0.35)' }}
               >
                 {elementEmoji || '✨'}
               </span>
@@ -281,10 +286,13 @@ export function TradingCard({
           {cardNumber && (
             <div
               id="character-specs"
-              className={`mt-1.5 text-center text-[10px] font-semibold tracking-widest uppercase py-0.5 px-2 rounded-md border shrink-0 ${
-                useWhiteText ? 'bg-white/[0.04] border-white/10' : 'bg-black/[0.03] border-black/10'
+              className={`mt-1.5 text-center text-[10px] font-semibold tracking-widest uppercase py-0.5 px-2 rounded-md shrink-0 ${
+                useWhiteText ? 'bg-white/[0.05]' : 'bg-black/[0.04]'
               }`}
-              style={{ color: legibleColorStart }}
+              style={{
+                color: legibleColorStart,
+                border: `1px solid ${colorStart}33`,
+              }}
             >
               {cardNumber}
             </div>
@@ -304,8 +312,8 @@ export function TradingCard({
           {ability && (
             <div
               id="ability-passive"
-              className={`p-1.5 px-2 rounded-lg border shrink-0 ${
-                useWhiteText ? 'bg-white/[0.04] border-white/10' : 'bg-black/[0.03] border-black/10'
+              className={`p-1.5 px-2 rounded-lg shrink-0 ${
+                useWhiteText ? 'bg-white/[0.05]' : 'bg-black/[0.04]'
               }`}
             >
               <div className="flex items-center gap-1.5 mb-0.5">
@@ -339,10 +347,17 @@ export function TradingCard({
                 key={index}
                 id={`attack-${index}`}
                 className={`flex flex-col gap-0.5 shrink-0 ${
-                  index < visibleAttacks.length - 1
-                    ? `border-b pb-2 ${useWhiteText ? 'border-white/10' : 'border-black/10'}`
-                    : ''
+                  index < visibleAttacks.length - 1 ? 'pb-2' : ''
                 }`}
+                style={
+                  index < visibleAttacks.length - 1
+                    ? {
+                        borderBottom: useWhiteText
+                          ? '1px solid rgba(255, 255, 255, 0.08)'
+                          : '1px solid rgba(0, 0, 0, 0.06)',
+                      }
+                    : undefined
+                }
               >
                 {/* Attack Title Line: Cost + Name on left, Damage on right */}
                 <div className="flex items-center justify-between gap-2">
@@ -394,10 +409,10 @@ export function TradingCard({
         {showCombatMatrix !== false && combatMatrix && (
           <section
             id="card-combat-matrix"
-            className={`relative z-10 mx-3 mt-auto mb-1 px-2.5 py-1.5 rounded-lg border text-[10px] grid grid-cols-3 divide-x text-center shrink-0 ${
+            className={`relative z-10 mx-3 mt-auto mb-1 px-2.5 py-1.5 rounded-lg text-[10px] grid grid-cols-3 text-center shrink-0 ${
               useWhiteText
-                ? 'bg-white/[0.04] border-white/10 divide-white/10'
-                : 'bg-black/[0.03] border-black/10 divide-black/10'
+                ? 'bg-white/[0.05]'
+                : 'bg-black/[0.04]'
             }`}
           >
             <div>
