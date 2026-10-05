@@ -98,6 +98,7 @@ export function TradingCard({
   cardColor = '#0c0a09',
   showGrid = true,
   showCornerBrackets = true,
+  showCombatMatrix = true,
   ability,
   attacks = [],
   combatMatrix,
@@ -112,6 +113,8 @@ export function TradingCard({
   // Ensure colored text (stage badge, card number, ability name, damage) is clearly legible against card background
   const legibleColorStart = getReadableAccent(colorStart, cardColor, useWhiteText);
   const legibleColorEnd = getReadableAccent(colorEnd, cardColor, useWhiteText);
+
+  const hasCombatMatrix = Boolean(showCombatMatrix && combatMatrix);
 
   return (
     <article
@@ -197,7 +200,7 @@ export function TradingCard({
               </span>
               <span
                 title="Element"
-                className="w-4 h-4 rounded-full flex items-center justify-center text-[10px] shrink-0 border bg-black/20 border-white/40 text-white"
+                className="w-5 h-5 rounded-full flex items-center justify-center text-xs shrink-0 border bg-black/25 border-white/40 text-white leading-none shadow-xs"
               >
                 {elementEmoji || '✨'}
               </span>
@@ -288,8 +291,15 @@ export function TradingCard({
           )}
         </section>
 
-        {/* Abilities & Attacks Section - Structured spacing to prevent erratic vertical drift */}
-        <section id="card-abilities" className="relative z-10 flex-1 min-h-0 flex flex-col justify-start gap-2.5 px-3.5 py-1">
+        {/* Abilities & Attacks Section - Tightly grouped unit that shifts down when combat stats are hidden */}
+        <section
+          id="card-abilities"
+          className={`relative z-10 flex-1 min-h-0 flex flex-col gap-2.5 px-3.5 ${
+            hasCombatMatrix
+              ? 'justify-start py-1'
+              : 'justify-center py-2.5'
+          }`}
+        >
           {/* Passive Trait / Ability (if present) */}
           {ability && (
             <div
@@ -322,8 +332,8 @@ export function TradingCard({
             </div>
           )}
 
-          {/* Attacks list (Max 2 attacks) - Anchored with predictable rhythm */}
-          <div className="flex-1 flex flex-col justify-start gap-2.5 min-h-0 pt-0.5">
+          {/* Attacks list (Max 2 attacks) - Tight contiguous stack */}
+          <div className="flex flex-col gap-2.5 min-h-0">
             {visibleAttacks.map((attack, index) => (
               <div
                 key={index}
@@ -381,7 +391,7 @@ export function TradingCard({
         </section>
 
         {/* Combat Matrix (Weakness, Resistance, Retreat) */}
-        {combatMatrix && (
+        {showCombatMatrix !== false && combatMatrix && (
           <section
             id="card-combat-matrix"
             className={`relative z-10 mx-3 mt-auto mb-1 px-2.5 py-1.5 rounded-lg border text-[10px] grid grid-cols-3 divide-x text-center shrink-0 ${
@@ -403,7 +413,14 @@ export function TradingCard({
                   useWhiteText ? 'text-white' : 'text-stone-800'
                 }`}
               >
-                <span>{combatMatrix.weakness.element}</span> {combatMatrix.weakness.multiplier}
+                {combatMatrix.weakness?.element ? (
+                  <>
+                    <span>{combatMatrix.weakness.element}</span>
+                    {combatMatrix.weakness.multiplier ? ` ${combatMatrix.weakness.multiplier}` : ''}
+                  </>
+                ) : (
+                  <span className="text-stone-400 font-normal">—</span>
+                )}
               </span>
             </div>
             <div>
@@ -419,7 +436,14 @@ export function TradingCard({
                   useWhiteText ? 'text-white' : 'text-stone-800'
                 }`}
               >
-                <span>{combatMatrix.resistance.element}</span> {combatMatrix.resistance.value}
+                {combatMatrix.resistance?.element ? (
+                  <>
+                    <span>{combatMatrix.resistance.element}</span>
+                    {combatMatrix.resistance.value ? ` ${combatMatrix.resistance.value}` : ''}
+                  </>
+                ) : (
+                  <span className="text-stone-400 font-normal">—</span>
+                )}
               </span>
             </div>
             <div>
@@ -435,10 +459,16 @@ export function TradingCard({
                   useWhiteText ? 'text-white' : 'text-stone-700'
                 }`}
               >
-                <Shield
-                  className={`w-2.5 h-2.5 ${useWhiteText ? 'text-white/70' : 'text-stone-500'}`}
-                />{' '}
-                {combatMatrix.retreatCost}
+                {combatMatrix.retreatCost === 0 ? (
+                  <span className="text-stone-400 font-medium text-[9px] uppercase">Free</span>
+                ) : (
+                  <>
+                    <Shield
+                      className={`w-2.5 h-2.5 ${useWhiteText ? 'text-white/70' : 'text-stone-500'}`}
+                    />{' '}
+                    {combatMatrix.retreatCost ?? 0}
+                  </>
+                )}
               </span>
             </div>
           </section>

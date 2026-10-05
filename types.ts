@@ -26,11 +26,12 @@ export interface TradingCardProps {
   cardColor?: string;
   showGrid?: boolean;
   showCornerBrackets?: boolean;
+  showCombatMatrix?: boolean;
   ability?: {
     name: string;
     description: string;
   } | null;
   attacks?: AttackInfo[];
-  combatMatrix?: CardCombatMatrix;
+  combatMatrix?: CardCombatMatrix | null;
   className?: string;
 }
