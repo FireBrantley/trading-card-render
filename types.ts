@@ -34,4 +34,5 @@ export interface TradingCardProps {
   attacks?: AttackInfo[];
   combatMatrix?: CardCombatMatrix | null;
   className?: string;
+  style?: React.CSSProperties;
 }
